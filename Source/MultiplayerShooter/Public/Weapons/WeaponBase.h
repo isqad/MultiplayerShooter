@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
+// Base class of Weapons
 UCLASS()
 class MULTIPLAYERSHOOTER_API AWeaponBase : public AActor
 {

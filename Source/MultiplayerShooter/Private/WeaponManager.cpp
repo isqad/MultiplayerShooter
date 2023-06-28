@@ -2,6 +2,8 @@
 
 
 #include "WeaponManager.h"
+#include "Weapons/WeaponBase.h"
+#include "MainPlayerCharacter.h"
 
 // Sets default values for this component's properties
 UWeaponManager::UWeaponManager()
@@ -18,8 +20,13 @@ void UWeaponManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	AActor* OwnerActor = GetOwner();
+	if (OwnerActor != nullptr) 
+	{
+		Character = Cast<AMainPlayerCharacter>(OwnerActor);
+	}
+
+	check(Character != nullptr);
 }
 
 
@@ -35,3 +42,6 @@ void UWeaponManager::CreateWeapon(UClass* WeaponClass)
 {
 }
 
+void UWeaponManager::SelectWeapon(AWeaponBase* Weapon)
+{
+}

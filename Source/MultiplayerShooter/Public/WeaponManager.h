@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "WeaponManager.generated.h"
 
+class AWeaponBase;
+class AMainPlayerCharacter;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MULTIPLAYERSHOOTER_API UWeaponManager : public UActorComponent
@@ -18,8 +20,28 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void CreateWeapon(UClass* WeaponClass);
+	void SelectWeapon(AWeaponBase* Weapon);
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+private:
+	UPROPERTY()
+	AWeaponBase* CurrentWeapon;
+
+	UPROPERTY()
+	AWeaponBase* MainWeapon;
+
+	UPROPERTY()
+	AWeaponBase* SecondaryWeapon;
+
+	UPROPERTY()
+	AWeaponBase* MeleeWeapon;
+
+	UPROPERTY()
+	TArray<AWeaponBase*> Grenades;
+
+	UPROPERTY()
+	AMainPlayerCharacter* Character;
 };

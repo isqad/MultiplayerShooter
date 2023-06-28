@@ -10,7 +10,6 @@ AWeaponBase::AWeaponBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 }
-
 // Called when the game starts or when spawned
 void AWeaponBase::BeginPlay()
 {
