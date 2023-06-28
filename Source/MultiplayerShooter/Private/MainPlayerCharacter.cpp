@@ -19,6 +19,7 @@ AMainPlayerCharacter::AMainPlayerCharacter()
 	Arms->SetupAttachment(Camera);
 
 	WeaponManager = CreateDefaultSubobject<UWeaponManager>(TEXT("WeaponManager"));
+	AddOwnedComponent(WeaponManager);
 	
 	Arms->SetCastShadow(false);
 	Arms->SetOnlyOwnerSee(true);

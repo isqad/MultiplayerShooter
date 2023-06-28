@@ -31,3 +31,7 @@ void UWeaponManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
+void UWeaponManager::CreateWeapon(UClass* WeaponClass)
+{
+}
+
