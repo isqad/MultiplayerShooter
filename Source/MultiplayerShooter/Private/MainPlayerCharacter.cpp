@@ -6,6 +6,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "WeaponManager.h"
+#include "Weapons/RiffleBasic.h"
 
 // Sets default values
 AMainPlayerCharacter::AMainPlayerCharacter()
@@ -19,8 +20,7 @@ AMainPlayerCharacter::AMainPlayerCharacter()
 	Arms->SetupAttachment(Camera);
 
 	WeaponManager = CreateDefaultSubobject<UWeaponManager>(TEXT("WeaponManager"));
-	WeaponManager->SetIsReplicated(true);
-	AddOwnedComponent(WeaponManager);
+	// AddOwnedComponent(WeaponManager);
 	
 	Arms->SetCastShadow(false);
 	Arms->SetOnlyOwnerSee(true);
@@ -35,7 +35,6 @@ AMainPlayerCharacter::AMainPlayerCharacter()
 void AMainPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 
@@ -58,6 +57,11 @@ void AMainPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMainPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainPlayerCharacter::MoveRight);
+}
+
+USkeletalMeshComponent* AMainPlayerCharacter::GetVisibleSkeletalMesh() const
+{
+	return IsLocallyControlled() ? Arms : GetMesh();
 }
 
 void AMainPlayerCharacter::LookUp(float AxisValue)

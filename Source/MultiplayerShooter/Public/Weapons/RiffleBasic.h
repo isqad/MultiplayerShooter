@@ -13,5 +13,4 @@ UCLASS()
 class MULTIPLAYERSHOOTER_API ARiffleBasic : public AWeaponBase
 {
 	GENERATED_BODY()
-	
 };

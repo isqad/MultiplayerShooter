@@ -14,34 +14,39 @@ class MULTIPLAYERSHOOTER_API UWeaponManager : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
+public:
 	UWeaponManager();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	void CreateWeapon(UClass* WeaponClass);
+	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+	AWeaponBase* CreateWeapon(UClass* WeaponClass);
+
+	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
 	void SelectWeapon(AWeaponBase* Weapon);
+
+	UFUNCTION()
+	void OnRep_SetCurrentWeapon();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-private:
-	UPROPERTY()
+	UPROPERTY(VisibleInstanceOnly, ReplicatedUsing=OnRep_SetCurrentWeapon, Category = "Weapons")
 	AWeaponBase* CurrentWeapon;
 
-	UPROPERTY()
+	UPROPERTY(VisibleInstanceOnly, replicated, Category = "Weapons")
 	AWeaponBase* MainWeapon;
 
-	UPROPERTY()
+	UPROPERTY(VisibleInstanceOnly, replicated, Category = "Weapons")
 	AWeaponBase* SecondaryWeapon;
 
-	UPROPERTY()
+	UPROPERTY(VisibleInstanceOnly, replicated, Category = "Weapons")
 	AWeaponBase* MeleeWeapon;
 
-	UPROPERTY()
+	UPROPERTY(VisibleInstanceOnly, replicated, Category = "Weapons")
 	TArray<AWeaponBase*> Grenades;
 
-	UPROPERTY()
+	UPROPERTY(VisibleInstanceOnly, replicated, Category = "Weapons")
 	AMainPlayerCharacter* Character;
 };

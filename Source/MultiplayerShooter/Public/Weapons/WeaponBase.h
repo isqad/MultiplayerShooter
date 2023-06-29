@@ -15,13 +15,15 @@ class MULTIPLAYERSHOOTER_API AWeaponBase : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AWeaponBase();
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	USkeletalMeshComponent* Mesh;
 
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	USceneComponent* DefaultScene;
 };
