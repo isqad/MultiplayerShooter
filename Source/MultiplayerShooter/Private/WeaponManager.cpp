@@ -28,11 +28,6 @@ void UWeaponManager::BeginPlay()
 	}
 
 	check(Character != nullptr);
-
-	if (GEngine && !GetWorld()->IsServer())
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("WeaponManager BeginPlay!"));
-	}
 }
 
 
