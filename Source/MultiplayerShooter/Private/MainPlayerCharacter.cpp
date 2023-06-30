@@ -57,6 +57,7 @@ void AMainPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMainPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainPlayerCharacter::MoveRight);
+	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AMainPlayerCharacter::PlayerJump);
 }
 
 USkeletalMeshComponent* AMainPlayerCharacter::GetVisibleSkeletalMesh() const
@@ -82,4 +83,9 @@ void AMainPlayerCharacter::MoveForward(float AxisValue)
 void AMainPlayerCharacter::MoveRight(float AxisValue)
 {
 	AddMovementInput(GetActorRightVector(), AxisValue);
+}
+
+void AMainPlayerCharacter::PlayerJump()
+{
+	Jump();
 }
