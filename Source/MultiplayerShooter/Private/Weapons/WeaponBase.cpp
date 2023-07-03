@@ -30,3 +30,9 @@ void AWeaponBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void AWeaponBase::DisableCastShadow()
+{
+	if (Mesh == nullptr) return;
+
+	Mesh->SetCastShadow(false);
+}

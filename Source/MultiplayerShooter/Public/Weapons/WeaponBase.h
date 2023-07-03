@@ -17,6 +17,8 @@ public:
 	AWeaponBase();
 	virtual void Tick(float DeltaTime) override;
 
+	void DisableCastShadow();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

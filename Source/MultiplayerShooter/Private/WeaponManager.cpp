@@ -30,20 +30,17 @@ void UWeaponManager::BeginPlay()
 	check(Character != nullptr);
 }
 
-
 // Called every frame
 void UWeaponManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 void UWeaponManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UWeaponManager, Character);
+	DOREPLIFETIME_CONDITION(UWeaponManager, Character, COND_OwnerOnly);
 	DOREPLIFETIME(UWeaponManager, MainWeapon);
 	DOREPLIFETIME(UWeaponManager, SecondaryWeapon);
 	DOREPLIFETIME(UWeaponManager, MeleeWeapon);
@@ -53,7 +50,7 @@ void UWeaponManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 AWeaponBase* UWeaponManager::CreateWeapon(UClass* WeaponClass)
 {
-	if (!GetWorld()->IsServer()) return nullptr;
+	if (GetWorld() == nullptr || !GetWorld()->IsServer()) return nullptr;
 
 	AActor* SpawnedWeapon = GetWorld()->SpawnActor(WeaponClass);
 	check(SpawnedWeapon != nullptr);
@@ -66,7 +63,7 @@ AWeaponBase* UWeaponManager::CreateWeapon(UClass* WeaponClass)
 
 void UWeaponManager::SelectWeapon(AWeaponBase* Weapon)
 {
-	if (!GetWorld()->IsServer()) return;
+	if (GetWorld() == nullptr || !GetWorld()->IsServer()) return;
 
 	check(Weapon != nullptr);
 	CurrentWeapon = Weapon;
@@ -75,7 +72,16 @@ void UWeaponManager::SelectWeapon(AWeaponBase* Weapon)
 // Called on Clients
 void UWeaponManager::OnRep_SetCurrentWeapon()
 {
-	if (GetWorld()->IsServer() && CurrentWeapon == nullptr) return;
+	if (GetWorld() == nullptr || GetWorld()->IsServer()) return;
+
+	AttachCurrentWeaponToCharacter();
+	DisableShadow();
+}
+
+void UWeaponManager::AttachCurrentWeaponToCharacter()
+{
+	check(CurrentWeapon != nullptr);
+	check(Character != nullptr);
 
 	USkeletalMeshComponent* ParentMesh = Character->GetVisibleSkeletalMesh();
 	FAttachmentTransformRules AttachmentRules{
@@ -87,3 +93,13 @@ void UWeaponManager::OnRep_SetCurrentWeapon()
 	CurrentWeapon->AttachToComponent(ParentMesh, AttachmentRules, FName("GripPoint"));
 }
 
+void UWeaponManager::DisableShadow()
+{
+	check(CurrentWeapon != nullptr);
+	check(Character != nullptr);
+
+	if (Character->IsLocallyControlled())
+	{
+		CurrentWeapon->DisableCastShadow();
+	}
+}

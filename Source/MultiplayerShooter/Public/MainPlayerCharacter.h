@@ -9,6 +9,7 @@
 class UCameraComponent;
 class USkeletalMeshComponent;
 class UWeaponManager;
+class UHealthComponent;
 
 UCLASS()
 class MULTIPLAYERSHOOTER_API AMainPlayerCharacter : public ACharacter
@@ -40,6 +41,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	UWeaponManager* WeaponManager;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UHealthComponent* HealthComponent;
 
 private:
 	void LookUp(float AxisValue);

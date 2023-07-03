@@ -6,6 +6,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "WeaponManager.h"
+#include "HealthComponent.h"
 #include "Weapons/RiffleBasic.h"
 
 // Sets default values
@@ -20,7 +21,7 @@ AMainPlayerCharacter::AMainPlayerCharacter()
 	Arms->SetupAttachment(Camera);
 
 	WeaponManager = CreateDefaultSubobject<UWeaponManager>(TEXT("WeaponManager"));
-	// AddOwnedComponent(WeaponManager);
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	
 	Arms->SetCastShadow(false);
 	Arms->SetOnlyOwnerSee(true);

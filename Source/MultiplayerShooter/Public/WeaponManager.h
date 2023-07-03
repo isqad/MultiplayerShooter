@@ -47,6 +47,10 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, replicated, Category = "Weapons")
 	TArray<AWeaponBase*> Grenades;
 
-	UPROPERTY(VisibleInstanceOnly, replicated, Category = "Weapons")
+	UPROPERTY(VisibleInstanceOnly, replicated)
 	AMainPlayerCharacter* Character;
+
+private:
+	void AttachCurrentWeaponToCharacter();
+	void DisableShadow();
 };
