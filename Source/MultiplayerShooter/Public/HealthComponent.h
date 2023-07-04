@@ -16,10 +16,9 @@ public:
 	// Sets default values for this component's properties
 	UHealthComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	// only server
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void ApplyDamage(float Damage);
 
 protected:
@@ -27,14 +26,14 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
-	ACharacter* Character;
+	ACharacter* Character{ nullptr };
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
-	float Health;
+	float Health{ 100.f };
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
-	float Armor;
+	float Armor{ 100.f };
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
-	bool bDead;
+	bool bDead{ false };
 };

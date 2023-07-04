@@ -40,7 +40,7 @@ void UWeaponManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION(UWeaponManager, Character, COND_OwnerOnly);
+	DOREPLIFETIME(UWeaponManager, Character);
 	DOREPLIFETIME(UWeaponManager, MainWeapon);
 	DOREPLIFETIME(UWeaponManager, SecondaryWeapon);
 	DOREPLIFETIME(UWeaponManager, MeleeWeapon);
@@ -50,8 +50,11 @@ void UWeaponManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 AWeaponBase* UWeaponManager::CreateWeapon(UClass* WeaponClass)
 {
-	if (GetWorld() == nullptr || !GetWorld()->IsServer()) return nullptr;
-
+	if (GetWorld() == nullptr || GetWorld()->GetNetMode() == ENetMode::NM_Client)
+	{
+		return nullptr;
+	}
+		
 	AActor* SpawnedWeapon = GetWorld()->SpawnActor(WeaponClass);
 	check(SpawnedWeapon != nullptr);
 
@@ -63,17 +66,15 @@ AWeaponBase* UWeaponManager::CreateWeapon(UClass* WeaponClass)
 
 void UWeaponManager::SelectWeapon(AWeaponBase* Weapon)
 {
-	if (GetWorld() == nullptr || !GetWorld()->IsServer()) return;
+	if (GetWorld() == nullptr || GetWorld()->GetNetMode() == ENetMode::NM_Client) return;
 
 	check(Weapon != nullptr);
 	CurrentWeapon = Weapon;
 }
 
 // Called on Clients
-void UWeaponManager::OnRep_SetCurrentWeapon()
+void UWeaponManager::OnRep_SetCurrentWeapon_Implementation()
 {
-	if (GetWorld() == nullptr || GetWorld()->IsServer()) return;
-
 	AttachCurrentWeaponToCharacter();
 	DisableShadow();
 }

@@ -29,21 +29,27 @@ public:
 	UFUNCTION(BlueprintPure)
 	USkeletalMeshComponent* GetVisibleSkeletalMesh() const;
 
+	DECLARE_DELEGATE(FFireStartEvent)
+	FFireStartEvent FireStartEvent {};
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(Server, Reliable)
+	void OnFireStart();
+	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	UCameraComponent* Camera;
+	UCameraComponent* Camera{ nullptr };
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	USkeletalMeshComponent* Arms;
+	USkeletalMeshComponent* Arms{ nullptr };
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	UWeaponManager* WeaponManager;
+	UWeaponManager* WeaponManager{ nullptr };
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	UHealthComponent* HealthComponent;
+	UHealthComponent* HealthComponent{ nullptr };
 
 private:
 	void LookUp(float AxisValue);
@@ -51,4 +57,5 @@ private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 	void PlayerJump();
+	void PrimaryAction();
 };

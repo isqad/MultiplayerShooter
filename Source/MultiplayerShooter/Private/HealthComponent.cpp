@@ -30,7 +30,7 @@ void UHealthComponent::BeginPlay()
 	check(Character != nullptr);
 }
 
-void UHealthComponent::ApplyDamage(float Damage)
+void UHealthComponent::ApplyDamage_Implementation(float Damage)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Applied Damage: %.2f"), Damage);
 }

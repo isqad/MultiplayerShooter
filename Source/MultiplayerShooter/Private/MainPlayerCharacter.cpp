@@ -32,10 +32,13 @@ AMainPlayerCharacter::AMainPlayerCharacter()
 	Camera->bUsePawnControlRotation = true;
 }
 
+
 // Called when the game starts or when spawned
 void AMainPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	FireStartEvent.BindUObject(this, &AMainPlayerCharacter::OnFireStart);
 }
 
 
@@ -59,6 +62,7 @@ void AMainPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMainPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainPlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AMainPlayerCharacter::PlayerJump);
+	PlayerInputComponent->BindAction("PrimaryAction", EInputEvent::IE_Pressed, this, &AMainPlayerCharacter::PrimaryAction);
 }
 
 USkeletalMeshComponent* AMainPlayerCharacter::GetVisibleSkeletalMesh() const
@@ -89,4 +93,16 @@ void AMainPlayerCharacter::MoveRight(float AxisValue)
 void AMainPlayerCharacter::PlayerJump()
 {
 	Jump();
+}
+
+void AMainPlayerCharacter::PrimaryAction()
+{
+	FireStartEvent.ExecuteIfBound();
+}
+
+void AMainPlayerCharacter::OnFireStart_Implementation()
+{
+	if (GetWorld() == nullptr ||  GetWorld()->GetNetMode() == ENetMode::NM_Client) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("Fire!"));
 }

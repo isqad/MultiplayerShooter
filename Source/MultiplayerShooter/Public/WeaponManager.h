@@ -17,7 +17,7 @@ class MULTIPLAYERSHOOTER_API UWeaponManager : public UActorComponent
 public:
 	UWeaponManager();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
 	AWeaponBase* CreateWeapon(UClass* WeaponClass);
@@ -25,7 +25,7 @@ public:
 	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
 	void SelectWeapon(AWeaponBase* Weapon);
 
-	UFUNCTION()
+	UFUNCTION(Client, Reliable)
 	void OnRep_SetCurrentWeapon();
 
 protected:
@@ -33,22 +33,22 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleInstanceOnly, ReplicatedUsing=OnRep_SetCurrentWeapon, Category = "Weapons")
-	AWeaponBase* CurrentWeapon;
+	AWeaponBase* CurrentWeapon{ nullptr };
 
 	UPROPERTY(VisibleInstanceOnly, replicated, Category = "Weapons")
-	AWeaponBase* MainWeapon;
+	AWeaponBase* MainWeapon{ nullptr };
 
 	UPROPERTY(VisibleInstanceOnly, replicated, Category = "Weapons")
-	AWeaponBase* SecondaryWeapon;
+	AWeaponBase* SecondaryWeapon{ nullptr };
 
 	UPROPERTY(VisibleInstanceOnly, replicated, Category = "Weapons")
-	AWeaponBase* MeleeWeapon;
+	AWeaponBase* MeleeWeapon{ nullptr };
 
 	UPROPERTY(VisibleInstanceOnly, replicated, Category = "Weapons")
-	TArray<AWeaponBase*> Grenades;
+	TArray<AWeaponBase*> Grenades{ TArray<AWeaponBase*>() };
 
 	UPROPERTY(VisibleInstanceOnly, replicated)
-	AMainPlayerCharacter* Character;
+	AMainPlayerCharacter* Character{ nullptr };
 
 private:
 	void AttachCurrentWeaponToCharacter();
